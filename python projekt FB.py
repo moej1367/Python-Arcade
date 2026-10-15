@@ -13,6 +13,14 @@ def flippblipp(m):
 
 
 def flipp_blipp_game():
+    print("------------------------------------------")
+    print()
+    print("               Flipp Blipp")
+    print()
+    print("             A guessing game") #kan skrivas med f string senare med användarens namn.
+    print()
+    print("------------------------------------------")
+    print()
     n = 1
     i=0
     print("      ", 1)
@@ -24,14 +32,13 @@ def flipp_blipp_game():
         if answer == str(correct_answer): #jämförs spelarens svar.
             i=i+1
         else:
+            print()
             print("Fel -", correct_answer)
             print()
-            print (f"Score: {i}")
-            print()
             print("Game over")
+            print()
+            print (f"Score: {i}")
             print()
             break
 
 
-
-        
