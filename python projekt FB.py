@@ -12,40 +12,26 @@ def flippblipp(m):
         return(m)
 
 
+def flipp_blipp_game():
+    n = 1
+    i=0
+    print("      ", 1)
+    while True:
+        n = n + 1
+        answer = input("Nästa: ")
+        correct_answer = flippblipp(n)
 
-n = 1
-
-play = True
-
-
-print(" ", 1)
-
-
-
-i=0
-def score(i):
-    if answer== str(correct_answer):
-        i=i+1 
-    else:
-        i=i+0
-    return i
+        if answer == str(correct_answer): #jämförs spelarens svar.
+            i=i+1
+        else:
+            print("Fel -", correct_answer)
+            print()
+            print (f"Score: {i}")
+            print()
+            print("Game over")
+            print()
+            break
 
 
-while play:
-    n = n + 1
-    answer = input("Nästa: ")
-    correct_answer = flippblipp(n)
 
-    if answer == str(correct_answer): #jämförs spelarens svar.
-        i=score(i)
-        pass
-# pass, gör inget om svaret är rätt. 
-    
-    else:
-        print("Fel -", correct_answer)
-        print()
-        print (f"Score: {i}")
-        print()
-        print("Game over")
-        play = False
         
