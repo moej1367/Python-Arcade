@@ -1,44 +1,133 @@
 
-games = {"1":"Biathlon", "2":"Flipp Blipp", "3":"Pop Quiz"}
 
-def menu():
+def login_splash():
     print("------------------------------------------")
     print()
     print("             Python Arcade")
     print()
-    print("                Welcome!") #kan skrivas med f string senare med användarens namn.
+    print("                Welcome!")
     print()
     print("------------------------------------------")
     print()
-
-    for (key, value) in games.items():
-        print(f"            {key}) {value}")
+   
+def menu(prompt, options): 
         print()
 
-    while True:
-        option = input("Option: ")
-        if option in games:
-            if option == "1":
-                biathlon_game()
+        for (key, value) in options.items():
+            print(f"	{key}) {value}")
+
+        print()
+
+        while True:
+            key = input(f"{prompt}: ")
+
+            if key in options:
+                print()
+                return key
+
+def login(users):
+        options = {"r":"Try again", "q":"Quit"}
+
+        while True:
+            print("         Log in to your account")
+            print()
+            user_name = input("User: ")
+            password = input("Password: ")
+
+            if user_name in users and users[user_name] == password:
+                print()
+                return user_name #skickar tillbaks username
+            
+            else:
+                print()
+                print("Invalid username or password")
+                print()
+                answer = menu("Option", options) # Ger nya val, r eller q
                 
+                if answer == "q":
+                    return None
+    
+
+#-------------------------------------------------------------------------------------------------------------------#
+
+games = {"1":"Biathlon", "2":"Flipp Blipp", "3":"Pop Quiz"}
+
+def main_menu(user_name):
+    while True:
+        print("------------------------------------------")
+        print()
+        print("             Python Arcade")
+        print()
+        print(f"             Welcome {user_name}!") #kan skrivas med f string senare med användarens namn.
+        print()
+        print("------------------------------------------")
+        print()
+        print("         Choose a game to play")
+        print()
+
+        for (key, value) in games.items():
+            print(f"            {key}) {value}")
+            print()
+        print("            4) Log out")
+        print()
+
+        option = input("Option: ")
+
+        if option == "4":
+            print()
+            print(f"Goodbye, {user_name}!")
+            print()
+            return "logout"
+        
+        elif option in games:
+            if option == "1":
+                game = biathlon_game
+
 
             elif option == "2":
-                flipp_blipp_game()
+                game = flipp_blipp_game #sparar en referens till spelets funktion
 
             elif option == "3":
                 print("Pop Quiz kommer vara här!")
+                continue
 
-
-            print()
-            print("------------------------------------------")
-            return option
-    
-           
+            while True:
+                game() #startar själva spelet som väljs
+                print()
+                print("------------------------------------------")
+            
+                choice = after_game() #när spelet är slut anropas after_game().
+                if choice == "menu":
+                    break
+        
+            
         else:
             print()
             print("Invalid option, please try again.")
             print()
 
+
+
+def after_game():
+    print()
+    print("What would you like to do?")
+    print()
+    print("1) Play again")
+    print()
+    print("2) Main menu")
+    print()
+
+    while True:
+        option = input("Option: ")
+        print()
+        if option == "1": #om spelare väljer 1 returnerar funk replay. Den inre loopen börjar om och spelet körs igen.
+            return "replay" 
+        elif option == "2": #om spelare väljer 2 returnerar funk menu. break avslutar den inre loopen
+            return "menu"   #och den yttre loopen visar huvudmenyn igen.
+        else:
+            print("Invalid option, please try again.")
+            print()
+    
 
 
 # Biathlon game
@@ -165,6 +254,7 @@ def flippblipp(m):
 
 
 def flipp_blipp_game():
+    print()
     print("------------------------------------------")
     print()
     print("               Flipp Blipp")
@@ -196,4 +286,27 @@ def flipp_blipp_game():
 
 # Pop Quiz
 
-menu()
+
+
+users = {
+    "Fei": "100",
+    "Mollie": "1367",
+    "Bosse": "ko"
+}
+while True:
+    login_splash()
+    user_name = login(users) 
+
+    if user_name is None: #om svaret är quit när man skrivit in sina uppgifter så skriver den Goodbye!
+        print("Goodbye!")
+        print()
+        break # programmet avslutas helt!
+
+    result = main_menu(user_name) #menyn där du väljer mellan spelen eller log out
+
+    if result == "logout":
+        print()
+        print("You have been logged out.")
+        print()
+
+        
