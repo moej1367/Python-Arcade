@@ -13,15 +13,15 @@ def login_splash():
 def menu(prompt, options): 
         print()
 
-        for (key, value) in options.items():
-            print(f"	{key}) {value}")
+        for (key, value) in options.items(): #Radar upp valen man har, använder items för att 
+            print(f"	{key}) {value}")#plocka ut key och motsvarande value
 
         print()
 
         while True:
-            key = input(f"{prompt}: ")
+            key = input(f"{prompt}: ")#key är det alternativet man skriver in
 
-            if key in options:
+            if key in options: #om key finns i dictionary options returnas svaret man skrev in
                 print()
                 return key
 
@@ -34,7 +34,7 @@ def login(users):
             user_name = input("User: ")
             password = input("Password: ")
 
-            if user_name in users and users[user_name] == password:
+            if user_name in users and users[user_name] == password: #Om username OCH lösen stämmer returnas username
                 print()
                 return user_name #skickar tillbaks username
             
@@ -42,7 +42,7 @@ def login(users):
                 print()
                 print("Invalid username or password")
                 print()
-                answer = menu("Option", options) # Ger nya val, r eller q
+                answer = menu("Option", options) # Ger nya val, r eller q #funktion menu anropas
                 
                 if answer == "q":
                     return None
@@ -53,12 +53,16 @@ def login(users):
 games = {"1":"Biathlon", "2":"Flipp Blipp", "3":"Pop Quiz"}
 
 def main_menu(user_name):
+    biathlon_score = 0
+    flipp_blipp_score = 0
+    pop_quiz_score = 0
+
     while True:
         print("------------------------------------------")
         print()
         print("             Python Arcade")
         print()
-        print(f"             Welcome {user_name}!") #kan skrivas med f string senare med användarens namn.
+        print(f"             Welcome {user_name}!") 
         print()
         print("------------------------------------------")
         print()
@@ -71,28 +75,49 @@ def main_menu(user_name):
         print("            4) Log out")
         print()
 
-        option = input("Option: ")
+        option = input("Option: ") #man väljer alternativ
 
         if option == "4":
             print()
+            print("================ SCOREBOARD ================")
+            print()
+            print(f"Player: {user_name}")
+            print()
+            print("                  Scores:")
+            print(f"Biathlon: {biathlon_score}")
+            print()
+            print(f"Flipp Blipp: {flipp_blipp_score}")
+            print()
+            print(f"Pop Quiz: {pop_quiz_score}")
+            print()
+            print("============================================")
+            print()
             print(f"Goodbye, {user_name}!")
             print()
-            return "logout"
+            return "logout" #logout sparas som en variabel för vilket val användaren gjorde
         
         elif option in games:
             if option == "1":
-                game = biathlon_game
-
+                game = biathlon_game 
 
             elif option == "2":
                 game = flipp_blipp_game #sparar en referens till spelets funktion
 
             elif option == "3":
-                print("Pop Quiz kommer vara här!")
-                continue
+                game = pop_quiz_game
+
+            
 
             while True:
-                game() #startar själva spelet som väljs
+                score = game() #startar själva spelet som väljs och sätter en referens i form av score
+
+                if option == "1":
+                    biathlon_score += score #sätter att score som returnar
+                elif option == "2":         #från funk blir spelet_score som variabel
+                    flipp_blipp_score += score
+                elif option == "3":
+                    pop_quiz_score += score
+
                 print()
                 print("------------------------------------------")
             
@@ -120,7 +145,7 @@ def after_game():
     while True:
         option = input("Option: ")
         print()
-        if option == "1": #om spelare väljer 1 returnerar funk replay. Den inre loopen börjar om och spelet körs igen.
+        if option == "1": #om spelare väljer 1 returnerar funktion replay. Den inre loopen börjar om och spelet körs igen.
             return "replay" 
         elif option == "2": #om spelare väljer 2 returnerar funk menu. break avslutar den inre loopen
             return "menu"   #och den yttre loopen visar huvudmenyn igen.
@@ -164,7 +189,7 @@ def close_target(targets, position): #targets = listan (ts) är den listan man s
     targets[position] = closed #om man stänger ett target 
     return targets             #returneras den uppdaterade listan för det
 
-def points(targets):
+def points_bi(targets):
     n = 0
     
     for target in targets:#target=ett mål i taget, targets=hela listan med mål
@@ -235,7 +260,8 @@ def biathlon_game():
     print()                                        #sjukter target, stringen görs om till index
     view_targets(ts) #visar uppdaterade listan/targets i slutet av de fem skotten.
     print()
-    print(f"You hit {points(ts)} of 5 targets") #dina poäng visas i slutet
+    print(f"You hit {points_bi(ts)} of 5 targets") #dina poäng visas i slutet
+    return int(points_bi(ts))
 
 
 # Flipp Blipp game
@@ -282,31 +308,149 @@ def flipp_blipp_game():
             print()
             print (f"Score: {i}")
             print()
+            return i
             break
 
 # Pop Quiz
 
+import random
+import time 
+
+def splash():
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    print("		Pop Quiz")
+    print()
+    print("      Test your all-around knowledge "   )
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")       
+
+def pop_quiz(question, prompt, options, correct_answer):
+    print()
+    print(question)
+    print()
+    for(key, value) in options.items():
+        print(f" {key}) {value}")
+    print()
+    
+    while True:
+        answer=input(f" {prompt}: ")
+        if answer in options:
+            print()
+            if answer== correct_answer:
+                print (" Correct!")
+                print("_________________________")
+                time.sleep(0.5)
+                print()
+                return answer
+            else:
+                print (" Incorrect!")
+                print("_________________________")
+                print()
+                time.sleep(0.5)
+                return answer
+        else:
+            print()
+            print("Invalid answer, please try again!")
+            print()
+          
+options_1={"A":"Sea turtles", "B":"Octopus", "C":"Dolhpin", "D":"Shark"}
+
+options_2={"A":"Nintendo", "B":"Microsoft", "C":"Sega", "D":"Sony"}
+
+options_3={"A":"Sydney", "B":"Melbourne", "C":"Brisbane", "D":"Canberra"}
+
+options_4={"A":"1989", "B":"1991", "C":"1987", "D":"1993"}
+
+options_5={"A":"Ag", "B":"Fe", "C":"gd", "D":"Au"}
+
+options_6={"A":"184", "B":"215", "C":"206", "D":"230"}
+
+options_7={"A":"George Lucas", "B":"Peter Jackson", "C":"Steven Spielberg", "D":"James Cameron"}
+
+options_8={"A":"Norway", "B":"Canada", "C":"Sweden", "D":"Finland"}
+
+options_9={"A":"Rosalind Franklin", "B":"Marie Curie", "C":"Ada Lovelace", "D":"Lise Meitner"}
+
+options_10={"A":"1912", "B":"1905", "C":"1920", "D":"1918"}
+
+options_11={"A":"Pink", "B":"White", "C":"Brown", "D":"Black"}
+
+options_12={"A":"Koala", "B":"Sloth", "C":"Chimpanzee", "D":"Raccoon"}
+
+options_13={"A":"A colony", "B":"A flotilla", "C":"A flamboyance", "D":"A festival"}
+
+options_14={"A":"France", "B":"Belgium", "C":"United States", "D":"United Kingdom"}
+
+options_15={"A":"Sonic the Hedgehog", "B":"Pac-Man", "C":"Mario", "D":"Mega Man"}
 
 
-users = {
+def random_questions():
+    questions=[
+    ("Which animal has three hearts?", "Your answer ", options_1, "B"),
+    ("Which company created the PlayStation?", "Your answer ", options_2, "D"),
+    ("Which is the capital of Australia?", "Your answer ", options_3, "D"),
+    ("Which year did the Berlin Wall fall?", "Your answer ", options_4, "A"),
+    ("What is the chemical symbol for gold?", "Your answer ", options_5, "D"),
+    ("How many bones does an adult human have in their body normally?", "Your answer ", options_6, "C"),
+    ("Who directed the films 'Lord of the rings'?", "Your answer ", options_7, "B"),
+    ("Which country has the most islands ?", "Your answer ", options_8, "C"),
+    ("Who was the first woman to win a Nobel Prize in 1903 ?", "Your answer ", options_9, "B"),
+    ("Which year did the Titanic sink on its maiden voyage?", "Your answer ", options_10, "A"),
+    ("What color is a polar bear's skin underneath their white fur?", "Your answer ", options_11, "D"),
+    ("Which animal has remarkably similar finger prints to a human?", "Your answer ", options_12, "A"),
+    ("What is a group of flamingos called?", "Your answer ", options_13, "C"),
+    ("In which country were French Fries originally invented?", "Your answer ", options_14, "B"),
+    ("What iconic video game character was originally named 'Jumpman' in 1981?", "Your answer ", options_15, "C")
+          ]
+    random.shuffle(questions)
+    return questions
+
+def pop_quiz_game():
+    m=0
+    questions= random_questions()
+    for num in range(5):
+        question, prompt, options, correct_answer = questions[num]
+            
+        print(f"Question {num + 1}")
+        answer= pop_quiz(question, prompt, options, correct_answer)
+        m=points(m, answer, correct_answer)
+    print(f"Your total score is {m}/5")
+    return m
+    
+    
+def points(m, answer, correct_answer):
+    if answer==correct_answer:
+        m=m+1
+    else:
+        m=m+0
+    return m
+
+
+
+
+
+
+
+
+
+users = {             #Användarnamn resp lösen (Fler användare kan läggas till)
     "Fei": "100",
     "Mollie": "1367",
     "Bosse": "ko"
 }
-while True:
+while True:   
     login_splash()
     user_name = login(users) 
 
     if user_name is None: #om svaret är quit när man skrivit in sina uppgifter så skriver den Goodbye!
         print("Goodbye!")
         print()
-        break # programmet avslutas helt!
+        break #programmet avslutas helt!
 
     result = main_menu(user_name) #menyn där du väljer mellan spelen eller log out
 
     if result == "logout":
         print()
-        print("You have been logged out.")
+        print("You have been logged out.") #därefter börjar login (while)loopen igen, vilket gör det möjligt för ny användare att logga in
         print()
 
         
